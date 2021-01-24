@@ -1,0 +1,225 @@
+$def with( sales_data,source_data,source_all_title,source_stat_data,clue_data,clue_title )
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        1111
+    </div>
+    <div class="row">
+        <div class="col-lg-12" id="sales_swarp" style="min-height: 400px;">
+
+        </div>
+        <div class="col-lg-6" id="source_swarp" style="min-height: 400px;">
+
+        </div>
+        <div class="col-lg-6" id="order_swarp" style="min-height: 400px;">
+
+        </div>
+    </div>
+    <!-- <script src="static/js/bootstrap.min.js"></script> -->
+    <script src="static/js/echarts.min.js"></script>
+
+    <script type="text/javascript">
+        //柱状图
+        //数据
+        var sales_data = $:sales_data
+        //初始化
+        var chart_1 = echarts.init(document.getElementById("sales_swarp"));
+        //参数设置
+        var option_1 = {
+            //表头
+            title: {
+                text: "XX公司月销售额",
+                subtext: "销售额（单位：万）"
+            },
+            //提示信息
+            tooltip: {
+                trigger: "axis"
+            },
+            //工具栏
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: {},//数据视图 可以编辑
+                    restore: {},//还原
+                    saveAsImage: {},//保存图片
+                    magicType: { type: ['line', 'bar'] },//切换折线图和柱状图
+                    dataZoom: {}//区域放大
+                }
+            },
+            //横坐标
+            xAxis: {
+                type: "category",
+                data: sales_data["category"]
+            },
+            //纵坐标
+            yAxis: {
+                type: 'value'
+            },
+
+            series: [
+                {
+                    name: "销售额",
+                    type: "bar",
+                    data: sales_data["data"],
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                    },
+                    markPoint:{
+                        data:[
+                            {
+                                type:"max",
+                                name:"最大值"
+                            },
+                            {
+                                type:"min",
+                                name:"最小值"
+                            },
+                        ]
+                    },
+                    markLine:{
+                        data:[
+                            {
+                                type:"average",
+                                name:"平均值"
+                            }
+                        ]
+                    }
+
+                }
+            ]
+        };
+        chart_1.setOption(option_1);
+        //饼图
+        //数据
+        var source_data = $:source_data
+        var source_all_title = $:source_all_title
+        var source_stat_data = $:source_stat_data
+        //初始化
+        var chart_2 = echarts.init(document.getElementById("source_swarp"));
+        //参数
+        var option_2 = {
+        //图例
+        legend:{
+            orient:'verical',
+            left:30,
+            data:source_all_title
+        },
+        //提示信息
+        tooltip:{
+            trigger:'item',
+            formatter:'{a}<br>{b}:{c}({d}%)'
+        },
+        //系列值
+        series: [
+                {
+                    name: "访问来源",
+                    type: "pie",
+                    radius:['40%','55%'],
+                    data: source_data,
+                    label:{
+                        formatter:'{a|{a}}\n{hr|}\n{b|{b}}:{c} {per|{d}%}',
+                        borderColor:'#aaa',
+                        borderWidth:1,
+                        borderRadius:4,
+                        backgroundColor:'#eee',
+                        rich:{
+                            a:{
+                                color: '#999',
+                                lineHeight:25,
+                                align:'center'
+                            },
+                            hr:{
+                                borderColor:'#aaa',
+                                width:'100%',
+                                borderWidth:0.5,
+                                height:0
+                            },
+                            b:{
+                                fontSize:16,
+                                lineHeight:30,
+                            },
+                            per:{
+                                color:'#eee',
+                                backgroundColor:'#334455',
+                                padding:[2,4],
+                                borderRadius:3
+                            }
+                        }
+                    },
+                    selectedMode:'single'
+
+                },
+                {
+                    name:"访问来源",
+                    type:"pie",
+                    radius:['0','30%'],
+                    data:source_stat_data,
+                    label:{
+                        position:'inner',
+                    },
+                    selectedMode:'single'
+                }
+
+            ]
+        };
+        chart_2.setOption(option_2);
+        //漏斗图
+        var clue_data = $:clue_data
+        var clue_title = $:clue_title
+        //初始化
+        var chart_3 = echarts.init(document.getElementById("order_swarp"));
+        //参数
+        var option_3 = {
+            title:{
+                text:'销售线索转化图'
+            },
+            //提示信息
+            tooltip:{
+                trigger:'item',
+                formatter:'{a}<br/>{b}:{c}%'
+            },
+            //图例
+            legend:{
+                data:clue_title
+            },
+            //工具栏
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: {},//数据视图 可以编辑
+                    restore: {},//还原
+                    saveAsImage: {},//保存图片
+                }
+            },
+            //系列值
+            series:{
+                name:'漏斗图',
+                type:'funnel',
+                data:clue_data,
+                label:{
+                        position:'inner',
+                },
+                emphasis:{
+                    label:{
+                        fontSize:20
+                    }
+                },
+            }
+
+        };
+        chart_3.setOption(option_3);
+    </script>
+
+</body>
+
+</html>
